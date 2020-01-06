@@ -14,6 +14,13 @@ public class Locker {
     }
   }
 
+  public Locker( int capacity) {
+    boxStatusMap = new HashMap<>();
+    for(int boxId=0; boxId<capacity; boxId++) {
+      boxStatusMap.put(boxId, false);
+    }
+  }
+
   public Ticket pressSave() {
     return generateTicket();
   }

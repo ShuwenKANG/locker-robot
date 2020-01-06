@@ -1,4 +1,5 @@
 import Exceptions.InvalidTicketException;
+import Exceptions.NoEmptyBoxException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -9,6 +10,7 @@ public class LockerRobotTest {
   @Test
   public void should_reten_ticket_when_press_save_button_given_empty_locker() {
     Locker locker = new Locker();
+
     Ticket ticket = locker.pressSave();
 
     assertNotNull(ticket);
@@ -31,5 +33,12 @@ public class LockerRobotTest {
     ticket.setBoxId(123);
 
     locker.pressGet(ticket);
+  }
+
+  @Test(expected = NoEmptyBoxException.class)
+  public void should_throw_exception_when_press_save_button_given_full_locker() {
+    Locker locker = new Locker(0);
+
+    locker.pressSave();
   }
 }
