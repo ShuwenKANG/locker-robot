@@ -37,7 +37,13 @@ When press save button
 Then return ticket with boxId==2
 ```
 
+```
+Given 2 lockers locker1 and locker2, 1 valid ticket of locker1
 
+When press get button and input ticket to locker2
+
+Then throw InvalidTicketException
+```
 
 # Primary Locker Robot
 ```

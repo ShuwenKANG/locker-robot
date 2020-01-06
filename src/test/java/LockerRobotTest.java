@@ -54,4 +54,15 @@ public class LockerRobotTest {
     assertEquals(2, locker.pressSave().getBoxId());
 
   }
+
+  @Test(expected = InvalidTicketException.class)
+  public void should_throw_exception_when_input_ticket_to_locker2_given_2_lockers_and_valid_ticket_of_locker1()
+      throws NoEmptyBoxException, InvalidTicketException {
+    Locker locker1 = new Locker();
+    Locker locker2 = new Locker();
+    Ticket ticket1 = locker1.pressSave();
+    Ticket ticket2 = locker2.pressSave();
+
+    locker2.pressGet(ticket1);
+  }
 }

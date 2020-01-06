@@ -2,19 +2,23 @@ import Exceptions.InvalidTicketException;
 import Exceptions.NoEmptyBoxException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 
 public class Locker {
 
   private int capacity = 24;
   private Map<Integer, Boolean> boxUsageStatusMap;
+  private UUID lockerId;
 
   public Locker() {
+    lockerId = UUID.randomUUID();
     boxUsageStatusMap = new HashMap<>();
     generateBoxUsageStatusMap(capacity);
   }
 
   public Locker( int capacity) {
+    lockerId = UUID.randomUUID();
     setCapacity(capacity);
     boxUsageStatusMap = new HashMap<>();
     generateBoxUsageStatusMap(capacity);
@@ -56,6 +60,7 @@ public class Locker {
     Ticket ticket = new Ticket();
     int boxId = generateBoxId();
     ticket.setBoxId(boxId);
+    ticket.setLockerId(lockerId);
     blockBox(boxId);
 
     return ticket;
@@ -77,11 +82,23 @@ public class Locker {
   }
 
   public void pressGet(Ticket ticket) throws InvalidTicketException {
-    int boxId = ticket.getBoxId();
-    if(boxId>= capacity || !getBoxStatus(boxId)) {
+    if(!isValidLockerId(ticket.getLockerId())) {
       throw new InvalidTicketException();
     }
-    releaseBox(boxId);
+
+    if(!isValidBoxId(ticket.getBoxId())) {
+      throw new InvalidTicketException();
+    }
+
+    releaseBox(ticket.getBoxId());
+  }
+
+  private boolean isValidBoxId(int boxId) {
+    return boxId<capacity && !checkIsEmptyBox(boxId);
+  }
+
+  private boolean isValidLockerId(UUID lockerId) {
+    return lockerId == this.lockerId;
   }
 
   private void releaseBox(int boxId) {
