@@ -1,3 +1,5 @@
+import Exceptions.InvalidTicketException;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
@@ -23,4 +25,12 @@ public class LockerRobotTest {
     assertTrue(locker.getBoxStatus(ticket.getBoxId()));
   }
 
+  @Test(expected = InvalidTicketException.class)
+  public void should_throw_exception_when_input_ticket_given_invalid_ticket() {
+    Locker locker = new Locker();
+    Ticket ticket = new Ticket();
+    ticket.setBoxId(123);
+
+    locker.pressGet(ticket);
+  }
 }

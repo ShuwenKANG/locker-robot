@@ -13,6 +13,13 @@ When 按取包按钮，输入合法小票
 
 Then 释放箱子
 ```
+```
+Given 
+
+When 按取包按钮，输入非法小票
+
+Then 抛异常
+```
 
 ```
 Given 满柜
@@ -23,13 +30,6 @@ Then 抛异常
 ```
 
 
-```
-Given 
-
-When 按取包按钮，输入非法小票
-
-Then 抛异常
-```
 
 # Primary Locker Robot
 ```
