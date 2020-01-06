@@ -1,28 +1,55 @@
 import Exceptions.InvalidTicketException;
+import Exceptions.NoEmptyBoxException;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class Locker {
 
-  private int CAPACITY = 24;
-  private Map<Integer, Boolean> boxStatusMap;
+  private int capacity = 24;
+  private Map<Integer, Boolean> boxUsageStatusMap;
 
   public Locker() {
-    boxStatusMap = new HashMap<>();
-    for(int boxId=0; boxId<CAPACITY; boxId++) {
-      boxStatusMap.put(boxId, false);
-    }
+    boxUsageStatusMap = new HashMap<>();
+    generateBoxUsageStatusMap(capacity);
   }
 
   public Locker( int capacity) {
-    boxStatusMap = new HashMap<>();
-    for(int boxId=0; boxId<capacity; boxId++) {
-      boxStatusMap.put(boxId, false);
+    setCapacity(capacity);
+    boxUsageStatusMap = new HashMap<>();
+    generateBoxUsageStatusMap(capacity);
+  }
+
+  private void generateBoxUsageStatusMap(int capacity) {
+    for (int boxId = 0; boxId < capacity; boxId++) {
+      // initially not used
+      boxUsageStatusMap.put(boxId, false);
     }
   }
 
-  public Ticket pressSave() {
-    return generateTicket();
+  private void setCapacity(int capacity) {
+    this.capacity = capacity;
+  }
+
+  public Ticket pressSave() throws NoEmptyBoxException {
+    if(hasEmptyBox()) {
+      return generateTicket();
+    }
+    throw new NoEmptyBoxException();
+  }
+
+  private boolean hasEmptyBox() {
+    int boxId = 0;
+    boolean hasEmpty = false;
+    while(!hasEmpty && boxId<capacity) {
+      hasEmpty = checkIsEmptyBox(boxId);
+      boxId++;
+    }
+    return hasEmpty;
+  }
+
+  private boolean checkIsEmptyBox(int boxId) {
+    return !boxUsageStatusMap.get(boxId);
   }
 
   private Ticket generateTicket() {
@@ -35,7 +62,7 @@ public class Locker {
   }
 
   private void blockBox(int boxId) {
-    boxStatusMap.put(boxId, true);
+    boxUsageStatusMap.put(boxId, true);
   }
 
   private int generateBoxId() {
@@ -44,17 +71,17 @@ public class Locker {
 
   public void pressGet(Ticket ticket) throws InvalidTicketException {
     int boxId = ticket.getBoxId();
-    if(boxId>=CAPACITY || !getBoxStatus(boxId)) {
+    if(boxId>= capacity || !getBoxStatus(boxId)) {
       throw new InvalidTicketException();
     }
     releaseBox(boxId);
   }
 
   private void releaseBox(int boxId) {
-    boxStatusMap.put(boxId, false);
+    boxUsageStatusMap.put(boxId, false);
   }
 
   public boolean getBoxStatus(int boxId) {
-    return boxStatusMap.get(boxId);
+    return boxUsageStatusMap.get(boxId);
   }
 }
