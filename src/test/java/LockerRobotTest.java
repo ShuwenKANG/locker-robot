@@ -2,13 +2,14 @@ import Exceptions.InvalidTicketException;
 import Exceptions.NoEmptyBoxException;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 public class LockerRobotTest {
 
   @Test
-  public void should_reten_ticket_when_press_save_button_given_empty_locker() throws NoEmptyBoxException {
+  public void should_return_ticket_when_press_save_button_given_empty_locker() throws NoEmptyBoxException {
     Locker locker = new Locker();
 
     Ticket ticket = locker.pressSave();
@@ -43,5 +44,14 @@ public class LockerRobotTest {
     locker.pressSave();
   }
 
+  @Test
+  public void should_return_ticket_with_boxId_equals_to_2_when_press_save_button_given_2_boxes_in_use_locker()
+      throws NoEmptyBoxException {
+    Locker locker = new Locker();
+    locker.pressSave();
+    locker.pressSave();
 
+    assertEquals(2, locker.pressSave().getBoxId());
+
+  }
 }

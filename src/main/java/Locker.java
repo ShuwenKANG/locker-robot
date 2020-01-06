@@ -66,7 +66,14 @@ public class Locker {
   }
 
   private int generateBoxId() {
-    return 0;
+    int boxId = 0;
+    while(boxId<capacity) {
+      if(checkIsEmptyBox(boxId)){
+        break;
+      }
+      boxId++;
+    }
+    return boxId;
   }
 
   public void pressGet(Ticket ticket) throws InvalidTicketException {

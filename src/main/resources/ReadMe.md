@@ -29,6 +29,14 @@ When 按存包按钮
 Then 抛异常
 ```
 
+```
+Given locker with to box used
+
+When press save button
+
+Then return ticket with boxId==2
+```
+
 
 
 # Primary Locker Robot
