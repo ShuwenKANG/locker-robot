@@ -81,10 +81,9 @@ When ask robot get package
 Then robot should release the specific box accroding to ticket
 ```
 
-
 ```
 # to check save order
-Given robot, 6 lockers, 1,2 are full and 3rd locker has empty box.
+Given robot, 3 lockers, 1,2 are full and 3rd locker has empty box.
 
 When 委托机器人存包
 
@@ -92,7 +91,7 @@ Then return ticket with ID of 3rd locker.
 ```
 
 ```
-Given robot, 6 lockers, ALL full 
+Given robot, 2 lockers, ALL full 
 
 When 委托机器人存包
 

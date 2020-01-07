@@ -120,4 +120,8 @@ public class Locker {
   public boolean getBoxStatus(int boxId) {
     return boxUsageStatusMap.get(boxId);
   }
+
+  public UUID getLockerId() {
+    return lockerId;
+  }
 }

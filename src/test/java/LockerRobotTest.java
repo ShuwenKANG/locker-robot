@@ -15,6 +15,7 @@ public class LockerRobotTest {
     Ticket ticket = locker.pressSave();
 
     assertNotNull(ticket);
+    assertEquals(Ticket.class, ticket.getClass());
   }
 
   @Test
@@ -97,5 +98,19 @@ public class LockerRobotTest {
     robot.getPackage(ticket);
 
     assertFalse(locker.getBoxStatus(ticket.getBoxId()));
+  }
+
+  @Test
+  public void should_return_ticket_from_2nd_locker_when_ask_robot_save_package_given_robot_1st_locker_is_full()
+      throws NoEmptyBoxException {
+    Locker locker1 = new Locker(0);
+    Locker locker2 = new Locker();
+    Robot robot = new Robot();
+    robot.assignLocker(locker1);
+    robot.assignLocker(locker2);
+
+    Ticket ticket = robot.savePackage();
+
+    assertEquals(locker2.getLockerId(), ticket.getLockerId());
   }
 }

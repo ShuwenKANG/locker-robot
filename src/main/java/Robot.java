@@ -16,7 +16,13 @@ public class Robot {
   }
 
   public Ticket savePackage() throws NoEmptyBoxException {
-    return lockerList.get(0).pressSave();
+    for( Locker locker: lockerList) {
+      try {
+        return locker.pressSave();
+      } catch (NoEmptyBoxException ignored) {
+      }
+    }
+    throw new NoEmptyBoxException();
   }
 
   public void getPackage(Ticket ticket) throws InvalidTicketException {
