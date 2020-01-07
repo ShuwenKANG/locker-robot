@@ -45,13 +45,13 @@ public class LockerRobotTest {
   }
 
   @Test
-  public void should_return_ticket_with_boxId_equals_to_2_when_press_save_button_given_2_boxes_in_use_locker()
+  public void should_return_ticket_with_boxId_equals_to_21_when_press_save_button_given_2_boxes_in_use_locker()
       throws NoEmptyBoxException {
     Locker locker = new Locker();
     locker.pressSave();
     locker.pressSave();
 
-    assertEquals(2, locker.pressSave().getBoxId());
+    assertEquals(21, locker.pressSave().getBoxId());
 
   }
 

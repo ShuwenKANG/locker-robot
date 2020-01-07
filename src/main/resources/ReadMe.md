@@ -45,6 +45,14 @@ When press get button and input ticket to locker2
 Then throw InvalidTicketException
 ```
 
+```$xslt
+# traverse hashMap every time to find empty box is time consuming
+# we should use a stack to cache Id of empty box
+# need to implemment this optimization and fullfill all previous tests
+
+change expect boxId==21 for the test before last test
+```
+
 # Primary Locker Robot
 ```
 Given robot, 6 lockers, 1,2 are full and 3rd locker has empty box.

@@ -2,6 +2,7 @@ import Exceptions.InvalidTicketException;
 import Exceptions.NoEmptyBoxException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 import java.util.UUID;
 
 
@@ -9,25 +10,29 @@ public class Locker {
 
   private int capacity = 24;
   private Map<Integer, Boolean> boxUsageStatusMap;
+  private Stack<Integer> emptyBoxStack;
   private UUID lockerId;
 
   public Locker() {
     lockerId = UUID.randomUUID();
     boxUsageStatusMap = new HashMap<>();
-    generateBoxUsageStatusMap(capacity);
+    emptyBoxStack = new Stack<>();
+    initLocker(capacity);
   }
 
   public Locker( int capacity) {
     lockerId = UUID.randomUUID();
     setCapacity(capacity);
     boxUsageStatusMap = new HashMap<>();
-    generateBoxUsageStatusMap(capacity);
+    emptyBoxStack = new Stack<>();
+    initLocker(capacity);
   }
 
-  private void generateBoxUsageStatusMap(int capacity) {
+  private void initLocker(int capacity) {
     for (int boxId = 0; boxId < capacity; boxId++) {
       // initially not used
       boxUsageStatusMap.put(boxId, false);
+      emptyBoxStack.push(boxId);
     }
   }
 
@@ -36,10 +41,15 @@ public class Locker {
   }
 
   public Ticket pressSave() throws NoEmptyBoxException {
-    if(hasEmptyBox()) {
+    if(containsEmptyBox()) {
       return generateTicket();
     }
     throw new NoEmptyBoxException();
+  }
+
+  private boolean containsEmptyBox() {
+
+    return !emptyBoxStack.empty();
   }
 
   private boolean hasEmptyBox() {
@@ -52,18 +62,26 @@ public class Locker {
     return hasEmpty;
   }
 
+
+
   private boolean checkIsEmptyBox(int boxId) {
     return !boxUsageStatusMap.get(boxId);
   }
 
   private Ticket generateTicket() {
     Ticket ticket = new Ticket();
-    int boxId = generateBoxId();
+    int boxId = popEmptyBoxId();
     ticket.setBoxId(boxId);
     ticket.setLockerId(lockerId);
     blockBox(boxId);
 
     return ticket;
+  }
+
+  private int popEmptyBoxId() {
+    int boxId = emptyBoxStack.pop();
+    boxUsageStatusMap.put(boxId, true);
+    return boxId;
   }
 
   private void blockBox(int boxId) {
@@ -103,6 +121,7 @@ public class Locker {
 
   private void releaseBox(int boxId) {
     boxUsageStatusMap.put(boxId, false);
+    emptyBoxStack.push(boxId);
   }
 
   public boolean getBoxStatus(int boxId) {
