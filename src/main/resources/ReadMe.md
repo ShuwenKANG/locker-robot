@@ -83,11 +83,20 @@ Then robot should release the specific box accroding to ticket
 
 ```
 # to check save order
-Given robot, 3 lockers, 1,2 are full and 3rd locker has empty box.
+Given robot, 3 lockers, 1st full and 2nd locker has empty box.
 
 When 委托机器人存包
 
-Then return ticket with ID of 3rd locker.
+Then return ticket with ID of 2nd locker.
+```
+
+```
+# to check get order
+Given robot, 2 lockers, valid ticket of 2nd locker.
+
+When 委托机器人存包
+
+Then release target box.
 ```
 
 ```

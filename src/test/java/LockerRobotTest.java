@@ -5,6 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class LockerRobotTest {
 
@@ -112,5 +113,20 @@ public class LockerRobotTest {
     Ticket ticket = robot.savePackage();
 
     assertEquals(locker2.getLockerId(), ticket.getLockerId());
+  }
+
+  @Test
+  public void should_release_target_box_when_ask_robot_get_package_given_valid_token_of_2nd_locker()
+      throws NoEmptyBoxException, InvalidTicketException {
+    Locker locker1 = new Locker();
+    Locker locker2 = new Locker();
+    Robot robot = new Robot();
+    robot.assignLocker(locker1);
+    robot.assignLocker(locker2);
+    Ticket ticket = locker2.pressSave();
+
+    robot.getPackage(ticket);
+
+    assertFalse(locker2.getBoxStatus(ticket.getBoxId()));
   }
 }
