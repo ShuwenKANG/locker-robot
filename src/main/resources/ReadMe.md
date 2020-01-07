@@ -53,6 +53,15 @@ Then throw InvalidTicketException
 change expect boxId==21 for the test before last test
 ```
 
+```$xslt
+# ticket should not be resused
+Given locker, ticket1 used, ticket2 unused
+
+When press get button and input ticke1
+
+Then throw InvalidTicketException
+```
+
 # Primary Locker Robot
 ```
 # check robot save 

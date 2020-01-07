@@ -5,7 +5,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 public class LockerRobotTest {
 
@@ -65,6 +64,16 @@ public class LockerRobotTest {
     Ticket ticket2 = locker2.pressSave();
 
     locker2.pressGet(ticket1);
+  }
+
+  @Test(expected = InvalidTicketException.class)
+  public void should_throw_exception_when_input_used_ticket() throws NoEmptyBoxException, InvalidTicketException {
+    Locker locker = new Locker();
+    Ticket ticketUsed = locker.pressSave();
+    locker.pressGet(ticketUsed);
+    Ticket ticketUnused = locker.pressSave();
+
+    locker.pressGet(ticketUsed);
   }
 
   @Test
