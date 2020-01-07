@@ -107,18 +107,9 @@ When 委托机器人存包
 Then Throw NoEmptyBoxException.
 ```
 
-```
-Given robot, 6 lockers, a valid ticket of locker 3
-
-When 委托机器人取包
-
-Then return "Successful" and box released.
-```
-
-```
-Given robot, 6 lockers, an invalid ticket of locker 3
-
-When 委托机器人取包
-
-Then return "Failed".
-```
+## Questions & Thoughts
+- Should we keep unnecessary test transfer from task?
+- Refactor may lead to test fail, should we modify tests or implement trickily.
+- TDD brings security issue, for instance public method only used by test may
+accidentally used by other class. (accessor method?)
+ 
