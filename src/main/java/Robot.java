@@ -1,3 +1,4 @@
+import Exceptions.InvalidTicketException;
 import Exceptions.NoEmptyBoxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,5 +17,9 @@ public class Robot {
 
   public Ticket savePackage() throws NoEmptyBoxException {
     return lockerList.get(0).pressSave();
+  }
+
+  public void getPackage(Ticket ticket) throws InvalidTicketException {
+    lockerList.get(0).pressGet(ticket);
   }
 }
