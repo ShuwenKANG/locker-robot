@@ -55,6 +55,26 @@ change expect boxId==21 for the test before last test
 
 # Primary Locker Robot
 ```
+# check robot save 
+Give robot, 1 locker, 
+
+When ask robot save package
+
+Then return ticket
+```
+
+```
+# check robot get
+Give robot, 1 locker, 1 valid ticket
+
+When ask robot get package
+
+Then robot should release the specific box accroding to ticket
+```
+
+
+```
+# to check save order
 Given robot, 6 lockers, 1,2 are full and 3rd locker has empty box.
 
 When 委托机器人存包

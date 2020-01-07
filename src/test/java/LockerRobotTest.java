@@ -65,4 +65,14 @@ public class LockerRobotTest {
 
     locker2.pressGet(ticket1);
   }
+
+  @Test
+  public void should_return_ticket_when_ask_robot_save_package_given_locker_robot() throws NoEmptyBoxException {
+    Locker locker = new Locker();
+    Robot robot = new Robot();
+    robot.assignLocker(locker);
+
+    assertNotNull(robot.savePackage());
+  }
+
 }
