@@ -1,33 +1,33 @@
 # Locker
 ![alt text](./img/locker.png)
 ```
-Given 有空箱
+Given locker
 
-When 按存包按钮
+When press save button
 
-Then 给小票
+Then return a ticket
 ```
 ```
-Given 
+Given locker, valid ticket
 
-When 按取包按钮，输入合法小票
+When press get button and input ticket
 
-Then 释放箱子
+Then release target box indicated on ticket
 ```
 ```
-Given 
+Given locker, fake ticket
 
-When 按取包按钮，输入非法小票
+When press get button and input ticket
 
-Then 抛异常
+Then throw InvalidTicketException
 ```
 
 ```
-Given 满柜
+Given full locker
 
-When 按存包按钮
+When press save button
 
-Then 抛异常
+Then throw NoEmptyBoxException
 ```
 
 ```
@@ -46,16 +46,16 @@ When press get button and input ticket to locker2
 Then throw InvalidTicketException
 ```
 
-```$xslt
+```
 # traverse hashMap every time to find empty box is time consuming
 # we should use a stack to cache Id of empty box
 # need to implemment this optimization and fullfill all previous tests
 
-change expect boxId==21 for the test before last test
+change expect boxId to 21 for the test before last test (or tricky implementation?)
 ```
 
 ```$xslt
-# ticket should not be resused
+# ticket should be expired after get
 Given locker, ticket1 used, ticket2 unused
 
 When press get button and input ticke1
@@ -80,39 +80,39 @@ Give robot, 1 locker, 1 valid ticket
 
 When ask robot get package
 
-Then robot should release the specific box accroding to ticket
+Then robot should release the target box accroding to ticket
 ```
 
 ```
-# to check save order
-Given robot, 3 lockers, 1st full and 2nd locker has empty box.
+# to check robot save order
+Given robot, 2 lockers, 1st full and 2nd locker has empty box.
 
-When 委托机器人存包
+When ask robot to save pkg
 
-Then return ticket with ID of 2nd locker.
+Then return ticket with LockerId equals to 2nd locker.
 ```
 
 ```
-# to check get order
+# to check robot get order
 Given robot, 2 lockers, valid ticket of 2nd locker.
 
-When 委托机器人存包
+When ask robot to save pkg
 
 Then release target box.
 ```
 
 ```
-# GREEN TEST
+# GREEN TEST for logic completeness
 Given robot, 2 lockers, ALL full 
 
-When 委托机器人存包
+When ask robot to get pkg
 
 Then Throw NoEmptyBoxException.
 ```
 #### Security Check
 
 ```
-Given locker, ticket
+Given locker, valid ticket
 
 When modify boxId on ticket
 
@@ -122,7 +122,7 @@ Then Throw InvalidTicketException
 
 ## Questions & Thoughts
 - Should we keep unnecessary(green) test transfer from task to keep logic completeness?
-- Refactor may leads to test fail, should we modify tests or implement trickily.
+- Refactor may lead to test fail, should we modify tests or implement trickily.
 - TDD brings security issue, for instance public method only used by test may
 accidentally used by other class. (accessor method only?)
  
