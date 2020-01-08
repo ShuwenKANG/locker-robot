@@ -129,7 +129,7 @@ public class LockerRobotTest {
     assertFalse(locker2.getBoxStatus(ticket.getBoxId()));
   }
 
-  @Test( expected = NoEmptyBoxException.class)
+  @Test(expected = NoEmptyBoxException.class)
   public void should_throw_NoEmptyBoxException_when_ask_robot_save_package_given_full_lockers()
       throws NoEmptyBoxException {
     Locker locker1 = new Locker(0);
@@ -139,5 +139,17 @@ public class LockerRobotTest {
     robot.assignLocker(locker2);
 
     robot.savePackage();
+  }
+
+  @Test(expected = InvalidTicketException.class)
+  public void should_throw_InvalidTicketException_when_modify_boxId_on_ticket()
+      throws NoEmptyBoxException, InvalidTicketException {
+    Locker locker = new Locker(2);
+    Ticket ticket1 = locker.pressSave();
+    Ticket ticket2 = locker.pressSave();
+
+    ticket2.setBoxId(ticket1.getBoxId());
+
+    locker.pressGet(ticket2);
   }
 }

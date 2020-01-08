@@ -100,13 +100,22 @@ Then release target box.
 ```
 
 ```
+# GREEN TEST
 Given robot, 2 lockers, ALL full 
 
 When 委托机器人存包
 
 Then Throw NoEmptyBoxException.
 ```
+## Security Check
 
+```
+Given locker, ticket
+
+When modify boxId on ticket
+
+Then Throw InvalidTicketException
+```
 ## Questions & Thoughts
 - Should we keep unnecessary test transfer from task?
 - Refactor may lead to test fail, should we modify tests or implement trickily.

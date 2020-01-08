@@ -15,6 +15,7 @@ public class Locker {
   private Stack<Integer> emptyBoxStack;
   private UUID lockerId;
   private Set<UUID> ticketIdSet;
+  private Map<UUID, Integer> ticketBoxMap;
 
   public Locker() {
     lockerId = UUID.randomUUID();
@@ -22,6 +23,7 @@ public class Locker {
     emptyBoxStack = new Stack<>();
     initLocker(capacity);
     ticketIdSet = new HashSet<>();
+    ticketBoxMap = new HashMap<>();
   }
 
   public Locker( int capacity) {
@@ -31,6 +33,7 @@ public class Locker {
     emptyBoxStack = new Stack<>();
     initLocker(capacity);
     ticketIdSet = new HashSet<>();
+    ticketBoxMap = new HashMap<>();
   }
 
   private void initLocker(int capacity) {
@@ -69,6 +72,7 @@ public class Locker {
     blockBox(boxId);
 
     ticketIdSet.add(ticket.getTicketId());
+    ticketBoxMap.put(ticket.getTicketId(), boxId);
 
     return ticket;
   }
@@ -84,20 +88,25 @@ public class Locker {
   }
 
   public void pressGet(Ticket ticket) throws InvalidTicketException {
-    if(!isValidTicketId(ticket.getTicketId())) {
-      throw new InvalidTicketException();
-    }
 
     if(!isValidLockerId(ticket.getLockerId())) {
       throw new InvalidTicketException();
     }
 
-    if(!isValidBoxId(ticket.getBoxId())) {
+    if(!isValidTicketId(ticket.getTicketId())) {
       throw new InvalidTicketException();
     }
 
-    releaseBox(ticket.getBoxId());
+    if(!isValidTicket(ticket)) {
+      throw new InvalidTicketException();
+    }
+
+    releaseBox(ticket);
     ticketIdSet.remove(ticket.getTicketId());
+  }
+
+  private boolean isValidTicket(Ticket ticket) {
+    return ticketBoxMap.get(ticket.getTicketId()).equals(ticket.getBoxId());
   }
 
   private boolean isValidTicketId(UUID ticketId) {
@@ -115,6 +124,12 @@ public class Locker {
   private void releaseBox(int boxId) {
     boxUsageStatusMap.put(boxId, false);
     emptyBoxStack.push(boxId);
+  }
+
+  private void releaseBox(Ticket ticket) {
+    boxUsageStatusMap.put(ticket.getBoxId(), false);
+    emptyBoxStack.push(ticket.getBoxId());
+    ticketBoxMap.remove(ticket.getTicketId());
   }
 
   public boolean getBoxStatus(int boxId) {
