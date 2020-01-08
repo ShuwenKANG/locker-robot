@@ -1,9 +1,7 @@
 import Exceptions.InvalidTicketException;
 import Exceptions.NoEmptyBoxException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 import java.util.UUID;
 
@@ -14,7 +12,6 @@ public class Locker {
   private Map<Integer, Boolean> boxUsageStatusMap;
   private Stack<Integer> emptyBoxStack;
   private UUID lockerId;
-  private Set<UUID> ticketIdSet;
   private Map<UUID, Integer> ticketBoxMap;
 
   public Locker() {
@@ -22,7 +19,6 @@ public class Locker {
     boxUsageStatusMap = new HashMap<>();
     emptyBoxStack = new Stack<>();
     initLocker(capacity);
-    ticketIdSet = new HashSet<>();
     ticketBoxMap = new HashMap<>();
   }
 
@@ -32,7 +28,6 @@ public class Locker {
     boxUsageStatusMap = new HashMap<>();
     emptyBoxStack = new Stack<>();
     initLocker(capacity);
-    ticketIdSet = new HashSet<>();
     ticketBoxMap = new HashMap<>();
   }
 
@@ -49,19 +44,15 @@ public class Locker {
   }
 
   public Ticket pressSave() throws NoEmptyBoxException {
-    if(containsEmptyBox()) {
+    if(hasEmptyBox()) {
       return generateTicket();
     }
     throw new NoEmptyBoxException();
   }
 
-  private boolean containsEmptyBox() {
+  private boolean hasEmptyBox() {
 
     return !emptyBoxStack.empty();
-  }
-
-  private boolean checkIsEmptyBox(int boxId) {
-    return !boxUsageStatusMap.get(boxId);
   }
 
   private Ticket generateTicket() {
@@ -71,7 +62,6 @@ public class Locker {
     ticket.setLockerId(lockerId);
     blockBox(boxId);
 
-    ticketIdSet.add(ticket.getTicketId());
     ticketBoxMap.put(ticket.getTicketId(), boxId);
 
     return ticket;
@@ -89,47 +79,26 @@ public class Locker {
 
   public void pressGet(Ticket ticket) throws InvalidTicketException {
 
-    if(!isValidLockerId(ticket.getLockerId())) {
-      throw new InvalidTicketException();
-    }
-
-    if(!isValidTicketId(ticket.getTicketId())) {
-      throw new InvalidTicketException();
-    }
-
     if(!isValidTicket(ticket)) {
       throw new InvalidTicketException();
     }
 
     releaseBox(ticket);
-    ticketIdSet.remove(ticket.getTicketId());
+    expireTicket(ticket);
+  }
+
+  private void expireTicket(Ticket ticket) {
+    ticketBoxMap.remove(ticket.getTicketId());
   }
 
   private boolean isValidTicket(Ticket ticket) {
-    return ticketBoxMap.get(ticket.getTicketId()).equals(ticket.getBoxId());
-  }
-
-  private boolean isValidTicketId(UUID ticketId) {
-    return ticketIdSet.contains(ticketId);
-  }
-
-  private boolean isValidBoxId(int boxId) {
-    return boxId<capacity && !checkIsEmptyBox(boxId);
-  }
-
-  private boolean isValidLockerId(UUID lockerId) {
-    return lockerId == this.lockerId;
-  }
-
-  private void releaseBox(int boxId) {
-    boxUsageStatusMap.put(boxId, false);
-    emptyBoxStack.push(boxId);
+    return ticketBoxMap.containsKey(ticket.getTicketId()) &&
+        ticketBoxMap.get(ticket.getTicketId()).equals(ticket.getBoxId());
   }
 
   private void releaseBox(Ticket ticket) {
     boxUsageStatusMap.put(ticket.getBoxId(), false);
     emptyBoxStack.push(ticket.getBoxId());
-    ticketBoxMap.remove(ticket.getTicketId());
   }
 
   public boolean getBoxStatus(int boxId) {

@@ -116,6 +116,8 @@ When modify boxId on ticket
 
 Then Throw InvalidTicketException
 ```
+
+
 ## Questions & Thoughts
 - Should we keep unnecessary test transfer from task?
 - Refactor may lead to test fail, should we modify tests or implement trickily.
