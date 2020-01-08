@@ -107,7 +107,7 @@ When 委托机器人存包
 
 Then Throw NoEmptyBoxException.
 ```
-## Security Check
+#### Security Check
 
 ```
 Given locker, ticket
@@ -119,8 +119,8 @@ Then Throw InvalidTicketException
 
 
 ## Questions & Thoughts
-- Should we keep unnecessary test transfer from task?
-- Refactor may lead to test fail, should we modify tests or implement trickily.
+- Should we keep unnecessary(green) test transfer from task to keep logic completeness?
+- Refactor may leads to test fail, should we modify tests or implement trickily.
 - TDD brings security issue, for instance public method only used by test may
-accidentally used by other class. (accessor method?)
+accidentally used by other class. (accessor method only?)
  
