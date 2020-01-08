@@ -67,7 +67,7 @@ Then throw InvalidTicketException
 ![alt text](./img/locker-robot.png)
 ```
 # check robot save 
-Give robot, 1 locker, 
+Given robot, 1 locker, 
 
 When ask robot save package
 
@@ -76,7 +76,7 @@ Then return ticket
 
 ```
 # check robot get
-Give robot, 1 locker, 1 valid ticket
+Given robot, 1 locker, 1 valid ticket
 
 When ask robot get package
 
