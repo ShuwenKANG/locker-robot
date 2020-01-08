@@ -1,4 +1,5 @@
-# Locker Robot
+# Locker
+![alt text](./img/locker.png)
 ```
 Given 有空箱
 
@@ -30,7 +31,7 @@ Then 抛异常
 ```
 
 ```
-Given locker with to box used
+Given locker with two box used
 
 When press save button
 
@@ -63,6 +64,7 @@ Then throw InvalidTicketException
 ```
 
 # Primary Locker Robot
+![alt text](./img/locker-robot.png)
 ```
 # check robot save 
 Give robot, 1 locker, 
